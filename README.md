@@ -1,0 +1,1 @@
+# zsh-ollama-command
