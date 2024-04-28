@@ -2,6 +2,8 @@
 (( ! ${+ZSH_OLLAMA_COMMANDS_HOTKEY} )) && typeset -g ZSH_OLLAMA_COMMANDS_HOTKEY='^o'
 # default ollama model as llama3
 (( ! ${+ZSH_OLLAMA_MODEL} )) && typeset -g ZSH_OLLAMA_MODEL='llama3'
+# default response number as 5
+(( ! ${+ZSH_OLLAMA_COMMANDS} )) && typeset -g ZSH_OLLAMA_COMMANDS='5'
 
 validate_required() {
   # check required tools are installed
@@ -37,10 +39,10 @@ fzf_ollama_commands() {
   zle end-of-line
   zle reset-prompt
 
-  ZSH_OLLAMA_COMMANDS_MESSAGE_CONTENT="Seeking OLLAMA for MacOS terminal commands for the following task: $ZSH_OLLAMA_COMMANDS_USER_QUERY. Reply with an array without newlines consisting solely of possible commands. The format would be like: ['command1; comand2;', 'command3&comand4;']. Response only contains array, no any additional description. No additional text should be present in each entry and commands, remove empty string entry. Each string entry should be a new string entry. If the task need more than one command, combine them in one string entry. Each string entry should only contain the command(s). Do not include empty entry. Provide multiple entry (at most 5 relevant entry) in response Json suggestions if available. Please ensure response can be parsed by jq"
+  ZSH_OLLAMA_COMMANDS_MESSAGE_CONTENT="Seeking OLLAMA for MacOS terminal commands for the following task: $ZSH_OLLAMA_COMMANDS_USER_QUERY. Reply with an array without newlines consisting solely of possible commands. The format would be like: ['command1; comand2;', 'command3&comand4;']. Response only contains array, no any additional description. No additional text should be present in each entry and commands, remove empty string entry. Each string entry should be a new string entry. If the task need more than one command, combine them in one string entry. Each string entry should only contain the command(s). Do not include empty entry. Provide multiple entry (at most $ZSH_OLLAMA_COMMANDS relevant entry) in response Json suggestions if available. Please ensure response can be parsed by jq"
 
   ZSH_OLLAMA_COMMANDS_REQUEST_BODY='{
-    "model": "llama3",
+    "model": "'$ZSH_OLLAMA_MODEL'",
     "messages": [
       {
         "role": "user",
@@ -78,4 +80,3 @@ autoload fzf_ollama_commands
 zle -N fzf_ollama_commands
 
 bindkey $ZSH_OLLAMA_COMMANDS_HOTKEY fzf_ollama_commands
-
