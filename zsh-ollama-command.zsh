@@ -65,7 +65,7 @@ fzf_ollama_commands() {
   local ret=$?
 
   # trim response content newline
-  ZSH_OLLAMA_COMMANDS_SUGGESTION=$(echo $ZSH_OLLAMA_COMMANDS_RESPONSE | tr -d '\n\r' | tr -d '[:space:]' | tr -d '\0' | jq '.')
+  ZSH_OLLAMA_COMMANDS_SUGGESTION=$(echo $ZSH_OLLAMA_COMMANDS_RESPONSE | tr -d '\n\r' | tr -d '\0' | jq '.')
   check_status
 
   # collect suggestion commands from response content
@@ -77,8 +77,8 @@ fzf_ollama_commands() {
   # Otherwise, pipes the output to fzf for interactive selection
   ZSH_OLLAMA_COMMANDS_SELECTED=$(echo $ZSH_OLLAMA_COMMANDS_SUGGESTION | tr -d '\0' | jq -r '.[]')
   check_status
-  ZSH_OLLAMA_COMMANDS_SELECTED=$(echo $ZSH_OLLAMA_COMMANDS_SUGGESTION | fzf --ansi --height=~10 --cycle)
 
+  ZSH_OLLAMA_COMMANDS_SELECTED=$(echo $ZSH_OLLAMA_COMMANDS_SUGGESTION | jq -r '.[]' | fzf --ansi --height=~10 --cycle)
   BUFFER=$ZSH_OLLAMA_COMMANDS_SELECTED
 
   zle end-of-line
