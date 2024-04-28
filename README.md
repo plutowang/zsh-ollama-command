@@ -1,7 +1,7 @@
 # zsh-ollama-command
 
 An [`oh-my-zsh`](https://ohmyz.sh) plugin that integrates the OLLAMA AI model 
-with [fzf](https://github.com/junegunn/fzf)to provide intelligent command 
+with [fzf](https://github.com/junegunn/fzf) to provide intelligent command 
 suggestions based on user input requirements.
 
 ## Features
@@ -43,7 +43,7 @@ suggestions based on user input requirements.
       zsh-ollama-command
     )
     ```
-3. Trigger the plugin: Press the custom shortcut (default is Ctrl-o) to start
+3. Input what you want to do then trigger the plugin. Press the custom shortcut (default is Ctrl-o) to start
    the command suggestion process.
 4. Interact with FZF: Type a query or input requirement, and FZF will display
    suggested MacOS terminal commands. Select one to execute.
