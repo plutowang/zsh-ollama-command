@@ -22,14 +22,12 @@ suggestions based on user input requirements.
 
 ## Configuration Variables
 
-| Variable Name                          | Default Value            | Description                                       |
-|----------------------------------------|--------------------------|---------------------------------------------------|
-| `ZSH_OLLAMA_MODEL`                     | `llama3`                 | OLLAMA model to use (e.g., `llama3` for the large |
-| model, or `small` for the small model) |                          |                                                   |
-| `ZSH_OLLAMA_COMMANDS_HOTKEY`           | `Ctrl-o`                 | Default shortcut key for triggering the           |
-| plugin                                 |                          |                                                   |
-| `ZSH_OLLAMA_COMMANDS`                  | 5                        | Number of command suggestions displayed           |
-| `ZSH_OLLAMA_URL`                       | `http://localhost:11434` | The URL of OLLAMA server host                     |
+| Variable Name                | Default Value            | Description                                       |
+|------------------------------|--------------------------|---------------------------------------------------|
+| `ZSH_OLLAMA_MODEL`           | `llama3`                 | OLLAMA model to use (e.g., `llama3` for the large |
+| `ZSH_OLLAMA_COMMANDS_HOTKEY` | `Ctrl-o`                 | Default shortcut key for triggering the plugin    |
+| `ZSH_OLLAMA_COMMANDS`        | 5                        | Number of command suggestions displayed           |
+| `ZSH_OLLAMA_URL`             | `http://localhost:11434` | The URL of OLLAMA server host                     |
 
 ## Usage
 
