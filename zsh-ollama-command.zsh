@@ -1,5 +1,7 @@
 # default shortcut as Ctrl-o
 (( ! ${+ZSH_OLLAMA_COMMANDS_HOTKEY} )) && typeset -g ZSH_OLLAMA_COMMANDS_HOTKEY='^o'
+# default ollama model as llama3
+(( ! ${+ZSH_OLLAMA_MODEL} )) && typeset -g ZSH_OLLAMA_MODEL='llama3'
 
 validate_required() {
   # check required tools are installed
