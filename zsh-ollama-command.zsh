@@ -29,6 +29,13 @@ validate_required() {
   fi
 }
 
+check_status() {
+  if [ $? -ne 0 ]; then
+    echo "༼ つ ◕_◕ ༽つ Sorry! Please try again..."
+    exit 1
+  fi
+}
+
 fzf_ollama_commands() {
   setopt extendedglob
 
@@ -59,14 +66,19 @@ fzf_ollama_commands() {
 
   # trim response content newline
   ZSH_OLLAMA_COMMANDS_SUGGESTION=$(echo $ZSH_OLLAMA_COMMANDS_RESPONSE | tr -d '\n\r' | tr -d '[:space:]' | tr -d '\0' | jq '.')
+  check_status
 
   # collect suggestion commands from response content
   ZSH_OLLAMA_COMMANDS_SUGGESTION=$(echo "$ZSH_OLLAMA_COMMANDS_SUGGESTION" | tr -d '\0' | jq -r '.message.content')
+  check_status
 
   # attempts to extract suggestions from ZSH_OLLAMA_COMMANDS_SUGGESTION using jq.
   # If jq fails or returns no output, displays an error message and exits.
   # Otherwise, pipes the output to fzf for interactive selection
-  ZSH_OLLAMA_COMMANDS_SELECTED=$(echo $ZSH_OLLAMA_COMMANDS_SUGGESTION | tr -d '\0' | jq -r '.[]' | fzf --ansi --height=~10 --cycle)
+  ZSH_OLLAMA_COMMANDS_SELECTED=$(echo $ZSH_OLLAMA_COMMANDS_SUGGESTION | tr -d '\0' | jq -r '.[]')
+  check_status
+  ZSH_OLLAMA_COMMANDS_SELECTED=$(echo $ZSH_OLLAMA_COMMANDS_SUGGESTION | fzf --ansi --height=~10 --cycle)
+
   BUFFER=$ZSH_OLLAMA_COMMANDS_SELECTED
 
   zle end-of-line
