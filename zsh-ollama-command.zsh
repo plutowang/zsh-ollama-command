@@ -12,22 +12,27 @@ validate_required() {
   if (( ! $+commands[jq] )) then
       echo "🚨: zsh-ollama-command failed as jq NOT found!"
       echo "Please install it with 'brew install jq'"
-      return;
+      return 1;
   fi
   if (( ! $+commands[fzf] )) then
       echo "🚨: zsh-ollama-command failed as fzf NOT found!"
       echo "Please install it with 'brew install fzf'"
-      return;
+      return 1;
   fi
   if (( ! $+commands[curl] )) then
       echo "🚨: zsh-ollama-command failed as curl NOT found!"
       echo "Please install it with 'brew install curl'"
-      return;
+      return 1;
   fi
   if ! (( $(pgrep -f ollama | wc -l ) > 0 )); then
     echo "🚨: zsh-ollama-command failed as OLLAMA server NOT running!"
     echo "Please start it with 'brew services start ollama'"
-    return;
+    return 1;
+  fi
+  if ! curl -s "${ZSH_OLLAMA_URL}/api/tags" | grep -q $ZSH_OLLAMA_MODEL; then
+    echo "🚨: zsh-ollama-command failed as model ${ZSH_OLLAMA_MODEL} server NOT found!"
+    echo "Please start it with 'ollama pull ${ZSH_OLLAMA_MODEL}' or adjust ZSH_OLLAMA_MODEL"
+    return 1;
   fi
 }
 
@@ -41,6 +46,10 @@ check_status() {
 
 fzf_ollama_commands() {
   setopt extendedglob
+  validate_required
+  if [ $? -eq 1 ]; then
+    return 1
+  fi
 
   ZSH_OLLAMA_COMMANDS_USER_QUERY=$BUFFER
 
