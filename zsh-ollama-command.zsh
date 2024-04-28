@@ -4,6 +4,8 @@
 (( ! ${+ZSH_OLLAMA_MODEL} )) && typeset -g ZSH_OLLAMA_MODEL='llama3'
 # default response number as 5
 (( ! ${+ZSH_OLLAMA_COMMANDS} )) && typeset -g ZSH_OLLAMA_COMMANDS='5'
+# default ollama server host
+(( ! ${+ZSH_OLLAMA_URL} )) && typeset -g ZSH_OLLAMA_URL='http://localhost:11434'
 
 validate_required() {
   # check required tools are installed
@@ -61,7 +63,7 @@ fzf_ollama_commands() {
     "stream": false
   }'
 
-  ZSH_OLLAMA_COMMANDS_RESPONSE=$(curl --silent http://localhost:11434/api/chat \
+  ZSH_OLLAMA_COMMANDS_RESPONSE=$(curl --silent "${ZSH_OLLAMA_URL}/api/chat" \
     -H "Content-Type: application/json" \
     -d "$ZSH_OLLAMA_COMMANDS_REQUEST_BODY")
   local ret=$?
