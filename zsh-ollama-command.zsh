@@ -7,26 +7,28 @@
 # default ollama server host
 (( ! ${+ZSH_OLLAMA_URL} )) && typeset -g ZSH_OLLAMA_URL='http://localhost:11434'
 
+[ -f /etc/os-release ] && OS_TYPE=$(cat /etc/os-release | grep "PRETTY_NAME" | sed -e "s/PRETTY_NAME=//" -e "s/\"//g") || OS_TYPE="MacOS"
+
 validate_required() {
   # check required tools are installed
   if (( ! $+commands[jq] )) then
       echo "🚨: zsh-ollama-command failed as jq NOT found!"
-      echo "Please install it with 'brew install jq'"
+      echo "Please install it first!"
       return 1;
   fi
   if (( ! $+commands[fzf] )) then
       echo "🚨: zsh-ollama-command failed as fzf NOT found!"
-      echo "Please install it with 'brew install fzf'"
+      echo "Please install it first!"
       return 1;
   fi
   if (( ! $+commands[curl] )) then
       echo "🚨: zsh-ollama-command failed as curl NOT found!"
-      echo "Please install it with 'brew install curl'"
+      echo "Please install it first!"
       return 1;
   fi
   if ! (( $(pgrep -f ollama | wc -l ) > 0 )); then
     echo "🚨: zsh-ollama-command failed as OLLAMA server NOT running!"
-    echo "Please start it with 'brew services start ollama'"
+    echo "Please start it first!"
     return 1;
   fi
   if ! curl -s "${ZSH_OLLAMA_URL}/api/tags" | grep -q $ZSH_OLLAMA_MODEL; then
@@ -59,7 +61,7 @@ fzf_ollama_commands() {
   print
   print -u1 "👻Please wait..."
 
-  ZSH_OLLAMA_COMMANDS_MESSAGE_CONTENT="Seeking OLLAMA for MacOS terminal commands for the following task: $ZSH_OLLAMA_COMMANDS_USER_QUERY. Reply with an array without newlines consisting solely of possible commands. The format would be like: ['command1; comand2;', 'command3&comand4;']. Response only contains array, no any additional description. No additional text should be present in each entry and commands, remove empty string entry. Each string entry should be a new string entry. If the task need more than one command, combine them in one string entry. Each string entry should only contain the command(s). Do not include empty entry. Provide multiple entry (at most $ZSH_OLLAMA_COMMANDS relevant entry) in response Json suggestions if available. Please ensure response can be parsed by jq"
+  [ ! -z "$ZSH_OLLAMA_PROMPT" ] && ZSH_OLLAMA_COMMANDS_MESSAGE_CONTENT="$ZSH_OLLAMA_PROMPT" || ZSH_OLLAMA_COMMANDS_MESSAGE_CONTENT="Seeking OLLAMA for $OS_TYPE terminal commands for the following task: $ZSH_OLLAMA_COMMANDS_USER_QUERY. Reply with an array without newlines consisting solely of possible commands. The format would be like: ['command1; comand2;', 'command3&comand4;']. Response only contains array, no any additional description. No additional text should be present in each entry and commands, remove empty string entry. Each string entry should be a new string entry. If the task need more than one command, combine them in one string entry. Each string entry should only contain the command(s). Do not include empty entry. Provide multiple entry (at most $ZSH_OLLAMA_COMMANDS relevant entry) in response Json suggestions if available. Please ensure response can be parsed by jq"
 
   ZSH_OLLAMA_COMMANDS_REQUEST_BODY='{
     "model": "'$ZSH_OLLAMA_MODEL'",
