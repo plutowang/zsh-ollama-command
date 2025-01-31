@@ -85,6 +85,10 @@ fzf_ollama_commands() {
   ZSH_OLLAMA_COMMANDS_SUGGESTION=$(echo "$ZSH_OLLAMA_COMMANDS_SUGGESTION" | tr -d '\0' | jq -r '.message.content')
   check_status
 
+  # Remove markdown code block markers
+  ZSH_OLLAMA_COMMANDS_SUGGESTION="${ZSH_OLLAMA_COMMANDS_SUGGESTION//\`\`\`json/}"
+  ZSH_OLLAMA_COMMANDS_SUGGESTION="${ZSH_OLLAMA_COMMANDS_SUGGESTION//\`\`\`/}"
+
   # attempts to extract suggestions from ZSH_OLLAMA_COMMANDS_SUGGESTION using jq.
   # If jq fails or returns no output, displays an error message and exits.
   # Otherwise, pipes the output to fzf for interactive selection
